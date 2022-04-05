@@ -7,15 +7,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.cucumber.java.en.*;
+import pageFactory.HomePage_PF;
+import pageFactory.LoginPage_PF;
 
-public class LoginSteps {
+public class LoginSteps_PF {
 	
 	WebDriver driver = null;
+	LoginPage_PF login;
+	HomePage_PF home;
 	
-	@SuppressWarnings("deprecation")
 	@Given("browser is open")
 	public void browser_is_open() {
-		System.out.println("inside step - browser is open");
+		System.out.println("==== PF === inside step - browser is open");
 		
 		String projectPath = System.getProperty("user.dir");
 		System.out.println("Project Path is : "+ projectPath);
@@ -32,33 +35,26 @@ public class LoginSteps {
 		driver.navigate().to("https://example.testproject.io/web/");
 		
 	}
-
-//	@When("user enters username and password")
-//	public void user_enters_username_and_password() {
-//		
-//		driver.findElement(By.id("name")).sendKeys("Ram");
-//		driver.findElement(By.id("password")).sendKeys("12345");
-//	    
-//	}
 	
 	@When("^user enters (.*) and (.*)$")
 	public void user_enters_username_and_password(String username, String password) {
 		
-		driver.findElement(By.id("name")).sendKeys(username);
-		driver.findElement(By.id("password")).sendKeys(password);
-	    
+		login = new LoginPage_PF(driver);
+		
+		login.enterUsername(username);
+		login.enterPassword(password);
+
 	}
 	
 	@And("user clicks on login")
 	public void user_clicks_on_login() {
-		driver.findElement(By.id("login")).click();
+		login.clickLogin();
 	}
 
 	@Then("user is navigated to the home page")
 	public void user_is_navigated_to_the_home_page() {
-	    driver.findElement(By.id("logout")).isDisplayed();
-	    driver.close();
-	    
-	    }
+		home.clickLogoutIsDisplayed();
+		driver.close();
+	}
 
 }
